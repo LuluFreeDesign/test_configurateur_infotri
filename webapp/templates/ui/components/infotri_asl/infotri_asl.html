@@ -1,17 +1,16 @@
-{#
-  Composant Info-tri ASL — Aperçu dynamique du label
+{% load static %}
+{% comment %}
+  Composant Info-tri ASL — Aperçu dynamique du label.
 
   Variables de contexte attendues :
-    - form.type_produit.value  : clé du type de produit (asl_general | gros_asl | epi | chasse_tir)
+    - form.type_produit.value  : asl_general | gros_asl | epi | chasse_tir
     - form.nom_produit.value   : nom du produit saisi par l'usager
     - form.version.value       : redigee | semi_redigee
-    - dest_combo_svg_template  : chemin vers le SVG de la combinaison de destinations
+    - dest_combo_svg_template  : chemin vers le SVG de destinations
     - texte_produit            : "CET ARTICLE SE TRIE" ou "LES DOUILLES USAGÉES SE TRIENT"
-    - version                  : redigee | semi_redigee
     - avec_conseil_reparation  : booléen
-#}
+{% endcomment %}
 
-{# Chargement de la police Muli via @font-face inline #}
 <style>
   @font-face {
     font-family: 'Muli';
@@ -38,101 +37,27 @@
 
 <div class="infotri-asl-label">
   {% if not form.type_produit.value %}
-    {# État vide — aucun type sélectionné #}
-    <div class="qf-flex qf-items-center qf-justify-center qf-min-h-[200px]">
+    <div class="qf-flex qf-items-center qf-justify-center" style="min-height: 200px;">
       <p class="qf-text-gray-500 qf-text-center qf-text-sm">
         Sélectionnez un type de produit pour voir l'aperçu de votre Info-tri
       </p>
     </div>
-
   {% else %}
-    {# ----------------------------------------------------------------
-       Rendu du label en deux couches superposées :
-       1. Le SVG de destination (signalétique + FR + destinations) → couche base
-       2. Le cartouche produit dynamique (texte) → couche HTML par-dessus
-    ---------------------------------------------------------------- #}
-    <div class="qf-relative qf-inline-block">
 
-      {# Couche 1 : SVG complet (signalétique Ecologic + FR + destinations) #}
-      {% if dest_combo_svg_template %}
-        <div class="qf-block">
-          {% include dest_combo_svg_template %}
-        </div>
-      {% endif %}
+    {% if version == "redigee" %}
+      <p style="font-family: 'Muli', sans-serif; font-size: 11px; font-weight: 800; text-transform: uppercase; margin: 0 0 6px 0; color: #000;">
+        {{ texte_produit }}
+      </p>
+    {% endif %}
 
-      {# Couche 2 : Cartouche produit dynamique
-         Positionné sur la zone du label où le nom du produit doit apparaître.
-         ⚠️ Les valeurs top/left/width/height sont à ajuster une fois
-            les SVGs définitifs intégrés (zone produit ≈ x:71-154, y:0-71 du SVG) #}
-      {% if form.nom_produit.value or version == "redigee" %}
-        <div
-          class="qf-absolute qf-flex qf-flex-col qf-items-center qf-justify-center"
-          style="
-            top: 0;
-            left: 71px;
-            width: 83px;
-            height: 71px;
-            font-family: 'Muli', sans-serif;
-            color: white;
-            text-align: center;
-            padding: 4px;
-          "
-          aria-label="Produit : {{ form.nom_produit.value }}"
-        >
-          {# Texte d'en-tête — version rédigée uniquement #}
-          {% if version == "redigee" %}
-            <span
-              class="qf-block"
-              style="
-                font-size: 6px;
-                font-weight: 800;
-                line-height: 1.1;
-                text-transform: uppercase;
-                letter-spacing: 0.02em;
-                margin-bottom: 2px;
-              "
-            >
-              {{ texte_produit }}
-            </span>
-          {% endif %}
+    {% if dest_combo_svg_template %}
+      {% include dest_combo_svg_template %}
+    {% endif %}
 
-          {# Nom du produit saisi par l'usager #}
-          {% if form.nom_produit.value %}
-            <span
-              class="qf-block"
-              style="
-                font-size: {% if version == 'redigee' %}8{% else %}10{% endif %}px;
-                font-weight: 700;
-                line-height: 1.2;
-                word-break: break-word;
-              "
-            >
-              {{ form.nom_produit.value }}
-            </span>
-          {% else %}
-            <span
-              class="qf-block"
-              style="font-size: 7px; font-weight: 400; opacity: 0.7; font-style: italic;"
-            >
-              nom du produit
-            </span>
-          {% endif %}
-        </div>
-      {% endif %}
-
-    </div>
-
-    {# ----------------------------------------------------------------
-       Informations additionnelles
-       quefairemedesdechets.fr + conseil réparation/don (sauf chasse_tir)
-    ---------------------------------------------------------------- #}
-    <div
-      class="qf-flex qf-flex-col qf-items-end qf-mt-1v"
-      style="font-family: 'Muli', sans-serif; font-size: 9px; color: #333;"
-    >
-      <span class="qf-font-bold">quefairemedesdechets.fr</span>
+    <div style="font-family: 'Muli', sans-serif; font-size: 10px; color: #333; margin-top: 6px; text-align: right;">
+      <strong>quefairemedesdechets.fr</strong>
       {% if avec_conseil_reparation %}
-        <span class="qf-text-gray-600">Privilégiez la réparation ou le don</span>
+        <br><span style="color: #666;">Privilégiez la réparation ou le don</span>
       {% endif %}
     </div>
 

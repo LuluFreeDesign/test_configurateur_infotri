@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr" data-fr-theme>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block page_title %}Configurateur Info-tri{% endblock %}</title>
+    <meta name="description" content="{% block page_description %}Générateur d'Info-tri réglementaire{% endblock %}">
+
+    {# DSFR — design system de l'État #}
+    <link rel="stylesheet" href="https://unpkg.com/@gouvfr/dsfr@1.11.2/dist/dsfr.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@gouvfr/dsfr@1.11.2/dist/utility/utility.min.css">
+
+    {# Tailwind Play CDN — préfixe qf- (config doit être définie avant le chargement du script) #}
+    <script>window.tailwind = { config: { prefix: 'qf-' } };</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    {# Turbo — bundle UMD synchrone (évite le full reload de la 1re soumission) #}
+    <script src="https://unpkg.com/@hotwired/turbo@7.3.0/dist/turbo.es2017-umd.js"></script>
+
+    {# Anti-FOUC sur le layout principal : applique flex avant que Tailwind soit chargé #}
+    <style>
+      [data-layout="split"] { display: flex; flex-direction: column; min-height: 100vh; }
+      @media (min-width: 768px) {
+        [data-layout="split"] { flex-direction: row; }
+      }
+    </style>
+</head>
+<body class="{% block body_classes %}{% endblock %}">
+
+{% block content %}{% endblock %}
+
+{% block js %}{% endblock %}
+
+</body>
+</html>

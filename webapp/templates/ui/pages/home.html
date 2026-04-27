@@ -1,0 +1,98 @@
+{% extends "ui/layout/base.html" %}
+
+{% block page_title %}Configurateur Info-tri — Choisissez votre filière{% endblock %}
+{% block page_description %}Générez facilement votre Info-tri réglementaire — filière TLC ou ASL{% endblock %}
+
+{% block content %}
+<div class="fr-container qf-py-8 qf-min-h-screen qf-flex qf-flex-col qf-items-center qf-justify-center">
+
+    <div class="qf-text-center qf-mb-8">
+        <h1 class="fr-h1">Configurateur Info-tri</h1>
+        <p class="fr-text--lead qf-max-w-prose qf-mx-auto">
+            Choisissez la filière REP pour laquelle vous souhaitez générer votre Info-tri réglementaire.
+        </p>
+    </div>
+
+    <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--center qf-w-full qf-max-w-3xl">
+
+        {# ── Carte TLC ─────────────────────────────────────────────────── #}
+        <div class="fr-col-12 fr-col-md-6">
+            <div class="fr-card fr-card--no-arrow fr-enlarge-link">
+                <div class="fr-card__body">
+                    <div class="fr-card__content">
+                        <h2 class="fr-card__title">
+                            <a href="/infotri/" class="fr-card__link">
+                                TLC
+                            </a>
+                        </h2>
+                        <p class="fr-card__desc">
+                            <strong>Textiles d'habillement, Linge de maison et Chaussures</strong>
+                        </p>
+                        <p class="fr-card__desc">
+                            Géré par <strong>Refashion</strong> (ex-Eco TLC).
+                            Vêtements, sous-vêtements, linge de maison, chaussures et accessoires.
+                        </p>
+                    </div>
+                </div>
+                <div class="fr-card__header">
+                    <div class="fr-card__img" aria-hidden="true">
+                        <div
+                            style="
+                                background: linear-gradient(135deg, #e8f0e8, #d0e8d0);
+                                height: 120px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                font-size: 2.5rem;
+                            "
+                        >
+                            👕
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# ── Carte ASL ─────────────────────────────────────────────────── #}
+        <div class="fr-col-12 fr-col-md-6">
+            <div class="fr-card fr-card--no-arrow fr-enlarge-link">
+                <div class="fr-card__body">
+                    <div class="fr-card__content">
+                        <h2 class="fr-card__title">
+                            <a href="/infotri-asl/" class="fr-card__link">
+                                ASL
+                            </a>
+                        </h2>
+                        <p class="fr-card__desc">
+                            <strong>Articles de Sports et Loisirs</strong>
+                        </p>
+                        <p class="fr-card__desc">
+                            Géré par <strong>ECOLOGIC</strong>.
+                            Articles de sport, équipements de protection individuelle,
+                            équipements de chasse et tir sportif.
+                        </p>
+                    </div>
+                </div>
+                <div class="fr-card__header">
+                    <div class="fr-card__img" aria-hidden="true">
+                        <div
+                            style="
+                                background: linear-gradient(135deg, #e8eef8, #d0dcf0);
+                                height: 120px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                font-size: 2.5rem;
+                            "
+                        >
+                            🏃
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock content %}
