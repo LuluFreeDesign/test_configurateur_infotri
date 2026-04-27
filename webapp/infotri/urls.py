@@ -1,5 +1,7 @@
 from django.urls import path
 
+app_name = "infotri"
+
 from infotri.views import (
     InfotriConfiguratorView,
     InfotriEmbedView,
