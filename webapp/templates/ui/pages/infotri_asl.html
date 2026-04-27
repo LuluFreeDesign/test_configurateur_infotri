@@ -1,0 +1,125 @@
+{% extends "ui/layout/base.html" %}
+{% load dsfr_tags static script_tags %}
+
+{% block page_title %}Configurateur Info-tri ASL — Articles de Sports et Loisirs{% endblock %}
+
+{% block page_description %}Générateur d'Info-tri réglementaire pour la filière ASL (Articles de Sports et Loisirs) — éco-organisme ECOLOGIC{% endblock %}
+
+{% block body_classes %}{% if not iframe %}qf-bg-gradient-infotri{% endif %}{% endblock %}
+
+{% block content %}
+<turbo-frame
+    id="infotri-asl-form"
+    class="qf-flex qf-flex-col md:qf-flex-row qf-min-h-screen {% if not iframe %}qf-w-screen{% endif %}
+    {% if iframe %}qf-rounded-lg !qf-border-2 !qf-border-solid !qf-border-grey-900{% endif %}"
+>
+    <main class="qf-flex qf-flex-1 qf-min-w-0 qf-flex-col qf-items-start qf-gap-2w qf-p-2w">
+        <h1 class="qf-mb-1w qf-text-2xl qf-leading-none qf-font-extrabold qf-tracking-tight qf-text-gray-900 md:qf-text-3xl lg:qf-text-4xl">
+            Configurez votre Info-tri ASL
+        </h1>
+
+        <p class="qf-max-w-prose">
+            Ce configurateur, conçu pour la filière <strong>Articles de Sports et Loisirs (ASL)</strong>
+            gérée par l'éco-organisme <strong>ECOLOGIC</strong>, vous permet de générer l'Info-tri
+            réglementaire adapté à votre produit et de l'intégrer facilement en widget sur vos pages
+            produit e-commerce.
+        </p>
+
+        <div class="qf-mr-auto qf-flex qf-h-full qf-max-w-full qf-flex-col qf-gap-2w qf-w-full">
+            <form
+                method="get"
+                action="{% url 'infotri_asl:configurator' %}"
+                class="qf-flex qf-flex-col qf-gap-2w"
+                onchange="this.requestSubmit()"
+            >
+                {# ── Étape 1 : Type de produit / Destinations ─────────────────── #}
+                <div>
+                    <h2 class="qf-text-xl qf-font-bold qf-mb-1v">
+                        Étape 1 — Quel type de produit ?
+                    </h2>
+                    <p class="qf-text-sm qf-text-gray-600 qf-mb-2v">
+                        Votre choix détermine automatiquement les destinations de tri affichées sur l'Info-tri.
+                    </p>
+                    {% dsfr_form_field form.type_produit %}
+                </div>
+
+                {# ── Étape 2 : Nom du produit ──────────────────────────────────── #}
+                {% if form.type_produit.value %}
+                <div>
+                    <h2 class="qf-text-xl qf-font-bold qf-mb-1v">
+                        Étape 2 — Nom du produit concerné
+                    </h2>
+                    <p class="qf-text-sm qf-text-gray-600 qf-mb-2v">
+                        Ce nom s'affichera directement dans le cartouche de l'Info-tri (40 caractères max).
+                    </p>
+                    {% dsfr_form_field form.nom_produit %}
+                </div>
+                {% endif %}
+
+                {# ── Étape 3 : Version ─────────────────────────────────────────── #}
+                {% if form.type_produit.value %}
+                <div>
+                    <h2 class="qf-text-xl qf-font-bold qf-mb-1v">
+                        Étape 3 — Version de l'Info-tri
+                    </h2>
+                    {% dsfr_form_field form.version %}
+                </div>
+                {% endif %}
+
+                {# ── Bouton Générer ────────────────────────────────────────────── #}
+                {% if form.type_produit.value and not show_code %}
+                <div>
+                    <button type="submit" name="show_code" value="true" class="fr-btn">
+                        Générer le code d'intégration
+                    </button>
+                </div>
+                {% endif %}
+            </form>
+
+            {# ── Code d'intégration ────────────────────────────────────────────── #}
+            {% if form.is_valid and form.type_produit.value and show_code %}
+            <div data-controller="scroll">
+                <h2 class="qf-text-xl qf-font-bold qf-mb-1w">Code à intégrer sur votre site</h2>
+
+                <div class="qf-mb-1w">
+                    <p class="qf-text-base">
+                        Copiez-collez cette balise HTML dans la page produit de votre site e-commerce.
+                        L'Info-tri sera automatiquement mis à jour en cas d'évolution réglementaire.
+                    </p>
+                </div>
+
+                <div class="fr-callout" data-controller="copy" data-copy-copied-value="Copié !">
+                    <pre
+                        class="qf-whitespace-normal qf-break-all qf-mb-1w qf-p-1w qf-bg-gray-100 qf-rounded qf-text-sm qf-font-mono"
+                        data-copy-target="toCopy"
+                    >&lt;script src="{% infotri_asl_script_url %}" data-config="type_produit={{ form.type_produit.value }}&amp;nom_produit={{ form.nom_produit.value|urlencode }}&amp;version={{ form.version.value }}"&gt;&lt;/script&gt;</pre>
+                    <button
+                        type="button"
+                        class="fr-btn"
+                        data-copy-target="button"
+                        data-action="click->copy#toClipboard"
+                    >
+                        Copier
+                    </button>
+                </div>
+            </div>
+            {% endif %}
+        </main>
+
+    {# ── Aperçu du label (colonne droite) ───────────────────────────────────── #}
+    <aside class="qf-flex qf-flex-col qf-shrink-0 md:qf-sticky md:qf-top-0">
+        <div class="qf-flex qf-items-center qf-justify-end qf-h-full qf-p-4w">
+            <div class="qf-bg-white qf-shadow-lg qf-p-3w">
+                {% include "ui/components/infotri_asl/infotri_asl.html" %}
+            </div>
+        </div>
+    </aside>
+</turbo-frame>
+{% endblock content %}
+
+{% block js %}
+    {{ block.super }}
+    {% if iframe %}
+        <script src="{% static 'infotri-asl-child.js' %}" defer></script>
+    {% endif %}
+{% endblock js %}
